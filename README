@@ -1,0 +1,5 @@
+##Task as a Service!
+
+* Task.[CRUD] via RESTFul service.
+* Task scheduler with compute nodes (with distributed clients)
+
