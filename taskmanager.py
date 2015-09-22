@@ -2,38 +2,32 @@ from flask import Flask
 from flask import request
 #pip install MySQL-python
 import mysql.connector
+import pymysql
 from time import gmtime, strftime, localtime
 from werkzeug import secure_filename
 
 app = Flask(__name__)
 
-cnx = mysql.connector.connect(user='root', password='',
+cnx = pymysql.connect(user='root', password='',
                               host='127.0.0.1',
-                              database='taskmanager')
+                              database='bige',
+                              cursorclass=pymysql.cursors.DictCursor)
 cnx.autocommit = True
-
-class MySQLCursorDict(mysql.connector.cursor.MySQLCursor):
-    def _row_to_python(self, rowdata, desc=None):
-        row = super(MySQLCursorDict, self)._row_to_python(rowdata, desc)
-        if row:
-            return dict(zip(self.column_names, row))
-        return None
-
-cur = cnx.cursor(cursor_class=MySQLCursorDict)
 
 @app.route('/')
 def hello_world():
-    cur.execute("DESC basic_tasks")
-    desc = cur.fetchall()
+    with cnx.cursor() as cur:
+        cur.execute("DESC basic_tasks")
+        desc = cur.fetchall()
 
-    cur.execute("SELECT * FROM basic_tasks where finish_time=''")
-    rows = cur.fetchall()
+        cur.execute("SELECT * FROM basic_tasks where finish_time=''")
+        rows = cur.fetchall()
 
-    # We don't have the direct url to display image(maybe), consider to store image url directly.
-    # for r in rows:
-    #    r['image_path'] = "<a href='http://long-long-long-name-for-pc.anwcl.com:5001/produce/input/" + r['image_path'].split('/')[-1] + "'>" + r['image_path'] + "</a>"
+        # We don't have the direct url to display image(maybe), consider to store image url directly.
+        # for r in rows:
+        #    r['image_path'] = "<a href='http://long-long-long-name-for-pc.anwcl.com:5001/produce/input/" + r['image_path'].split('/')[-1] + "'>" + r['image_path'] + "</a>"
 
-    return 'Scheme:</br>' + str(desc) + '</br></br>' + 'All Tasks:</br>' + '</br>'.join([str(row) for row in rows])
+        return 'Scheme:</br>' + str(desc) + '</br></br>' + 'All Tasks:</br>' + '</br>'.join([str(row) for row in rows])
 
 @app.route('/file-store', methods=['POST'])
 def style_image():
@@ -69,7 +63,8 @@ def task_create():
     sql_insert = sql_insert_template.format(create_time=current_time, finish_time='', image_path=image_path, image_id=image_id, style_image=style_image, in_process=0, user_id=user_id)
     #sql_insert = sql_insert_template.format(create_time=current_time, finish_time='', image_path=image_path, image_id=image_id, style_image='examples/inputs/shennaichuan.jpg', in_process=0)
     print(sql_insert)
-    cur.execute(sql_insert)
+    with cnx.cursor() as cur:
+        cur.execute(sql_insert)
 
     return ''
 
