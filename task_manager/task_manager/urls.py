@@ -18,5 +18,5 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^neural-task/', include('task_processor.urls')),
+    url(r'^', include('task_processor.urls')),
 ]
