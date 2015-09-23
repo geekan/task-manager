@@ -11,3 +11,6 @@ class ImageNeuralTask(models.Model):
     image_path = models.CharField(max_length=255, default='')
     image_url = models.CharField(max_length=255, default='')
     style_image = models.CharField(max_length=255, default='')
+
+    #def __str__(self):
+    #    return str(self._meta.get_fields())
