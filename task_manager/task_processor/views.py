@@ -19,7 +19,7 @@ def index(request):
     print(tasks)
     return HttpResponse('<br/>'.join([str(task) for task in tasks]))
 
-def add_task(request, *args, **kwargs):
+def neural_task(request, *args, **kwargs):
     print(args, kwargs, request.POST, request.GET)
     good_paras = ['image_url', 'image_id', 'style_image_path']
     para_dict = {k: request.REQUEST.get(k, '') for k in good_paras}
