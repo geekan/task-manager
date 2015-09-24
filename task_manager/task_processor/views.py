@@ -21,7 +21,7 @@ def index(request):
 
 def neural_task(request, *args, **kwargs):
     print(args, kwargs, request.POST, request.GET)
-    good_paras = ['image_url', 'image_id', 'style_image_path']
+    good_paras = ['image_url', 'image_id', 'style_image_path', 'user_id']
     para_dict = {k: request.REQUEST.get(k, '') for k in good_paras}
     para_dict['create_time'] = strftime("%Y-%m-%d %H:%M:%S", localtime())
     task = ImageNeuralTask(**para_dict)
