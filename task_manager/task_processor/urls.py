@@ -4,6 +4,6 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^add/(.*)/?$', views.add_task, name='add_task'),
-    url(r'^neural-task/(.*)/?$', views.add_task),
+    url(r'^add/(.*)/?$', views.neural_task, name='add_task'),
+    url(r'^neural-task/(.*)/?$', views.neural_task),
 ]
