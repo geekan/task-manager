@@ -1,2 +1,2 @@
 #!/bin/bash
-exec ./manage.py runserver 0.0.0.0:5001
+nohup ./manage.py runserver 0.0.0.0:5001 > django.log 2>&1 &
