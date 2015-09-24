@@ -10,17 +10,6 @@ import logging
 
 l = logging.getLogger(__name__)
 
-# Create your views here.
-def merge_dicts(*dict_args):
-    '''
-    Given any number of dicts, shallow copy and merge into a new dict,
-    precedence goes to key value pairs in latter dicts.
-    '''
-    result = {}
-    for dictionary in dict_args:
-        result.update(dictionary)
-    return result
-
 def index(request):
     tasks = list(ImageNeuralTask.objects.all().values())
     l.debug(tasks)
