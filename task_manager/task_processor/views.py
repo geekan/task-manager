@@ -7,6 +7,7 @@ from models import ImageNeuralTask
 from time import strftime, localtime
 
 import logging
+import json
 
 l = logging.getLogger(__name__)
 
@@ -26,6 +27,13 @@ def neural_task(request, *args, **kwargs):
     task = ImageNeuralTask(**para_dict)
     task.save()
     return index(request)
+
+def neural_task_json(request, *args, **kwargs):
+    return HttpResponse(
+        json.dumps(
+            list(ImageNeuralTask.objects.filter(status='accepted').values())
+        )
+    )
 
 @csrf_exempt
 def neural_task_clean(request, *args, **kwargs):
