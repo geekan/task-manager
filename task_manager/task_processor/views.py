@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
+
 from models import ImageNeuralTask
 from time import strftime, localtime
 
@@ -19,6 +22,7 @@ def index(request):
     print(tasks)
     return HttpResponse('<br/>'.join([str(task) for task in tasks]))
 
+@csrf_exempt
 def neural_task(request, *args, **kwargs):
     print(args, kwargs, request.POST, request.GET)
     good_paras = ['image_url', 'image_id', 'style_image_path', 'user_id']
@@ -26,4 +30,10 @@ def neural_task(request, *args, **kwargs):
     para_dict['create_time'] = strftime("%Y-%m-%d %H:%M:%S", localtime())
     task = ImageNeuralTask(**para_dict)
     task.save()
+    return index(request)
+
+@csrf_exempt
+def neural_task_clean(request, *args, **kwargs):
+    print(args, kwargs, request.POST, request.GET)
+    ImageNeuralTask.objects.filter(Q(image_id='') | Q(user_id='')).delete()
     return index(request)
