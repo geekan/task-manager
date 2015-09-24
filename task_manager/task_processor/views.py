@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.views import generic
 from django.db.models import Q
 
 from models import ImageNeuralTask
@@ -11,12 +12,23 @@ import json
 
 l = logging.getLogger(__name__)
 
+class IndexView(generic.ListView):
+    template_name = 'task_processor/index.html'
+    context_object_name = 'last_neural_task_list'
+
+    def get_queryset(self):
+        return ImageNeuralTask.objects.order_by('create_time')[:-5]
+
+class DetailView(generic.DetailView):
+    model = ImageNeuralTask
+    template_name = 'task_processor/detail.html'
+
 def index(request):
-    #l.error(__name__)
-    #tasks = list(ImageNeuralTask.objects.all().values())
-    #l.debug(tasks)
-    #return HttpResponse('<br/>'.join([str(task) for task in tasks]))
-    return neural_task_json(request)
+    return HttpResponse(
+        json.dumps(
+            list(ImageNeuralTask.objects.all().values())
+        )
+    )
 
 @csrf_exempt
 def neural_task(request, *args, **kwargs):
