@@ -13,9 +13,10 @@ l = logging.getLogger(__name__)
 
 def index(request):
     #l.error(__name__)
-    tasks = list(ImageNeuralTask.objects.all().values())
+    #tasks = list(ImageNeuralTask.objects.all().values())
     #l.debug(tasks)
-    return HttpResponse('<br/>'.join([str(task) for task in tasks]))
+    #return HttpResponse('<br/>'.join([str(task) for task in tasks]))
+    return neural_task_json(request)
 
 @csrf_exempt
 def neural_task(request, *args, **kwargs):
