@@ -14,20 +14,16 @@ l = logging.getLogger(__name__)
 
 class IndexView(generic.ListView):
     template_name = 'task_processor/index.html'
-    context_object_name = 'last_neural_task_list'
+    context_object_name = 'neural_task_list'
 
     def get_queryset(self):
         return ImageNeuralTask.objects.order_by('create_time')[:-5]
 
-class DetailView(generic.DetailView):
-    model = ImageNeuralTask
-    template_name = 'task_processor/detail.html'
-
 def index(request):
-    return HttpResponse(
-        json.dumps(
-            list(ImageNeuralTask.objects.all().values())
-        )
+    return render(
+        request,
+        'task_processor/index.html',
+        {'neural_tasks': json.dumps(list(ImageNeuralTask.objects.all().values()))}
     )
 
 @csrf_exempt
