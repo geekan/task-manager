@@ -6,6 +6,10 @@ from django.db.models import Q
 from models import ImageNeuralTask
 from time import strftime, localtime
 
+import logging
+
+l = logging.getLogger(__name__)
+
 # Create your views here.
 def merge_dicts(*dict_args):
     '''
@@ -19,12 +23,12 @@ def merge_dicts(*dict_args):
 
 def index(request):
     tasks = list(ImageNeuralTask.objects.all().values())
-    print(tasks)
+    l.debug(tasks)
     return HttpResponse('<br/>'.join([str(task) for task in tasks]))
 
 @csrf_exempt
 def neural_task(request, *args, **kwargs):
-    print(args, kwargs, request.POST, request.GET)
+    l.info(args, kwargs, request.POST, request.GET)
     good_paras = ['image_url', 'image_id', 'style_image_path', 'user_id']
     para_dict = {k: request.REQUEST.get(k, '') for k in good_paras}
     para_dict['create_time'] = strftime("%Y-%m-%d %H:%M:%S", localtime())
@@ -34,6 +38,6 @@ def neural_task(request, *args, **kwargs):
 
 @csrf_exempt
 def neural_task_clean(request, *args, **kwargs):
-    print(args, kwargs, request.POST, request.GET)
+    l.info(args, kwargs, request.POST, request.GET)
     ImageNeuralTask.objects.filter(Q(image_id='') | Q(user_id='')).delete()
     return index(request)
