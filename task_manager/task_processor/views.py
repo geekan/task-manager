@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views import generic
 from django.db.models import Q
 
-from models import ImageNeuralTask
+from .models import ImageNeuralTask
 from time import strftime, localtime
 
 import logging
