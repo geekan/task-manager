@@ -28,7 +28,7 @@ def index(request):
 
 @csrf_exempt
 def neural_task(request, *args, **kwargs):
-    l.warn(args, kwargs, request.POST, request.GET)
+    l.warn(request.POST)
     good_paras = ['image_url', 'image_id', 'style_image_path', 'user_id']
     para_dict = {k: request.POST.get(k, '') for k in good_paras}
     para_dict['create_time'] = strftime("%Y-%m-%d %H:%M:%S", localtime())
