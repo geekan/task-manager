@@ -49,10 +49,10 @@ def neural_task_set(request):
     para_dict = {k: request.GET.get(k, '') for k in good_paras if request.GET.get(k, '')} # only use not empty value
     image_id = request.GET.get('image_id', '')
     if not image_id:
-        return 'empty image_id'
+        return HttpResponse('empty image_id')
     task = ImageNeuralTask.objects.filter(image_id=image_id).update(**para_dict)
     #return HttpResponse('')
-    return 'success'
+    return HttpResponse('success')
 
 @csrf_exempt
 def neural_task_clean(request, *args, **kwargs):
