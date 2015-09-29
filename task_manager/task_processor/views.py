@@ -45,11 +45,14 @@ def neural_task_json(request, *args, **kwargs):
     )
 
 def neural_task_set(request):
-    good_paras = ['image_id', 'status']
-    para_dict = {k: request.GET.get(k, '') for k in good_paras}
-    task = ImageNeuralTask.objects.filter(image_id=para_dict['image_id']).update(status=para_dict['status'])
+    good_paras = ['status', 'start_time', 'finish_time']
+    para_dict = {k: request.GET.get(k, '') for k in good_paras if request.GET.get(k, '')} # only use not empty value
+    image_id = request.GET.get('image_id', '')
+    if not image_id:
+        return 'empty image_id'
+    task = ImageNeuralTask.objects.filter(image_id=image_id).update(**para_dict)
     #return HttpResponse('')
-    return index(request)
+    return 'success'
 
 @csrf_exempt
 def neural_task_clean(request, *args, **kwargs):
